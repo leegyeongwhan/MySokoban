@@ -26,4 +26,28 @@ public class StageUtil {
         }
         return map;
     }
+
+
+    public static int[][] changeInnMap(List<String> lines) {
+        int[][] map = new int[lines.size()][];
+
+        for (int i = 0; i < map.length; i++) {
+            map[i] = changeIntMapRow(lines.get(i));
+        }
+
+        return map;
+    }
+
+    private static int[] changeIntMapRow(String row) {
+        char[] chars = row.toCharArray();
+        int[] intRow = new int[chars.length];
+
+        for (int i = 0; i < chars.length; i++) {
+            intRow[i] = Sign.chageCharToInt(chars[i]);
+        }
+
+        return intRow;
+    }
+
+
 }
