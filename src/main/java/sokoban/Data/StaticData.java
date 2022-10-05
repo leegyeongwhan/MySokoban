@@ -23,7 +23,7 @@ public enum StaticData {
         this.keyword = keyword;
     }
 
-    private String getKeyword() {
+    public String getKeyword() {
         return keyword;
     }
 }
