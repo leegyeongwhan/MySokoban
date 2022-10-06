@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CmdStageReaderImpl implements StageReader {
@@ -33,7 +34,7 @@ public class CmdStageReaderImpl implements StageReader {
             }
             //스테이지 시작 하는 부분 stage를 체크  따로 구분해 Stage 생성자에 넘긴다.
             if (StageUtil.isStartStage(line)) {
-                stageNumber++; //총 몇시테이지 까지있는지 구한다
+                stageNumber = getStageNumber(line);
                 isStageStart = true;
                 continue;
             }
@@ -44,6 +45,13 @@ public class CmdStageReaderImpl implements StageReader {
             }
         }
         return new Stage(lines, stageNumber);
+    }
+
+    private int getStageNumber(String line) {
+        int stageNumber;
+        String[] number = line.split(" ");//총 몇시테이지 까지있는지 구한다
+        stageNumber = Integer.parseInt(number[1]);
+        return stageNumber;
     }
 
     @Override
