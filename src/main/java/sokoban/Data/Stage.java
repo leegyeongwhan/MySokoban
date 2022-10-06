@@ -1,6 +1,5 @@
 package sokoban.Data;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,23 +14,39 @@ public class Stage {
     private int ballCount;
 
     public Stage(List<String> lines, int stageNumber) {
-        System.out.println(lines);
+        //         System.out.println(lines);
         this.chMap = StageUtil.changeChMap(lines);
         this.intMap = StageUtil.changeInnMap(lines);
 
-        System.out.println(Arrays.deepToString(chMap));
-        System.out.println(Arrays.deepToString(intMap));
+        //      System.out.println(Arrays.deepToString(chMap));
+//        System.out.println(Arrays.deepToString(intMap));
         this.stageNumber = stageNumber;
+
+        setMap(chMap, intMap);
     }
 
 
-    public void setMap(char[][] map) {
-        int height = map.length;
-        int width = map[0].length;
+    public void setMap(char[][] charMap, int[][] intMap) {
+        int height = charMap.length;
+        int width;
 
+        for (int i = 0; i < height; i++) {
+            width = charMap[i].length;
+            for (int j = 0; j < width; j++) {
+                System.out.print(charMap[i][j]);
 
+                int value = intMap[i][j];
+                if (Sign.BALL.getValue() == value) ballCount++;
+                if (Sign.HALL.getValue() == value) hallCount++;
+                if (Sign.PLAYER.getValue() == value) playerLocation = new Point(i, j);
+            }
+            System.out.println();
+        }
     }
 
+    public char[][] getChMap() {
+        return chMap;
+    }
 
     public int getStageNumber() {
         return stageNumber;
