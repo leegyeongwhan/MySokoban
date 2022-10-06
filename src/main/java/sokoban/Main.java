@@ -2,7 +2,6 @@ package sokoban;
 
 
 import sokoban.Data.Stage;
-import sokoban.Data.StaticData;
 import sokoban.Reader.CmdStageReaderImpl;
 import sokoban.Reader.StageReader;
 
@@ -26,9 +25,9 @@ public class Main {
 
         try {
             StageReader reader = new CmdStageReaderImpl();
-            List<Stage> map = reader.readAllMap();
+            List<Stage> maps = reader.readAllGameMap();
 
-            for (Stage stage : map) {
+            for (Stage stage : maps) {
                 AllPrintData(stage);
             }
 
@@ -39,6 +38,14 @@ public class Main {
 
     private static void AllPrintData(Stage stage) {
         System.out.println("Stage" + stage.getStageNumber());
+        stage.printMap();
+        System.out.println("가로 크기 : " + stage.getMapSize().getX());
+        System.out.println("세로 크기 : " + stage.getMapSize().getY());
+        System.out.println("구멍의 수 : " + stage.getHallCount());
+        System.out.println(" 공의 수 : " + stage.getBallCount());
+        int playerX = stage.getPlayerLocation().getX() + 1;
+        int playerY = stage.getPlayerLocation().getY() + 1;
+        System.out.println("플레이어 위치 (" + playerX + "," + playerY + ")");
         System.out.println();
     }
 }
