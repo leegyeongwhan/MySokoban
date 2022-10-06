@@ -6,6 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StageReader {
-    Stage readGameMap() throws IOException;
-    List<Stage> readAllMap() throws IOException;
+    Stage readStageMap() throws IOException;
+    List<Stage> readAllGameMap() throws IOException;
 }

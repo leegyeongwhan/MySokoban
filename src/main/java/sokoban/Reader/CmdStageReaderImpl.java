@@ -1,9 +1,7 @@
 package sokoban.Reader;
 
-import sokoban.Data.Sign;
 import sokoban.Data.Stage;
 import sokoban.Data.StageUtil;
-import sokoban.Data.StaticData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +13,7 @@ public class CmdStageReaderImpl implements StageReader {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     @Override
-    public Stage readGameMap() throws IOException {
+    public Stage readStageMap() throws IOException {
         String line = "";
         List<String> lines = new ArrayList<>();
         int stageNumber = 0;
@@ -48,11 +46,11 @@ public class CmdStageReaderImpl implements StageReader {
     }
 
     @Override
-    public List<Stage> readAllMap() throws IOException {
+    public List<Stage> readAllGameMap() throws IOException {
         List<Stage> gameMapList = new ArrayList<>();
 
         while (!isClosed()) {
-            gameMapList.add(readGameMap());
+            gameMapList.add(readStageMap());
         }
 
         return gameMapList;
