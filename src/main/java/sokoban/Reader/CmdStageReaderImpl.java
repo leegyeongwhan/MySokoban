@@ -23,6 +23,7 @@ public class CmdStageReaderImpl implements StageReader {
             line = br.readLine();
             //입력의 끝
             if (lineValidation(line)) {
+                br = null;
                 break;
             }
 
