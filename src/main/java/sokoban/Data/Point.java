@@ -1,19 +1,19 @@
 package sokoban.Data;
 
 public class Point {
-    private int x;
-    private int y;
+    private int raw;
+    private int cal;
 
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Point(int raw, int cal) {
+        this.raw = raw;
+        this.cal = cal;
     }
 
-    public int getX() {
-        return x;
+    public int getRaw() {
+        return raw;
     }
 
-    public int getY() {
-        return y;
+    public int getCal() {
+        return cal;
     }
 }

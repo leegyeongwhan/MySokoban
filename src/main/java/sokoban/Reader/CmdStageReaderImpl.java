@@ -13,6 +13,8 @@ import java.util.List;
 public class CmdStageReaderImpl implements StageReader {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+
+
     @Override
     public Stage readStageMap() throws IOException {
         String line = "";
