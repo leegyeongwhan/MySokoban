@@ -9,11 +9,18 @@ public class Point {
         this.cal = cal;
     }
 
+    public Point() {
+
+    }
+
     public int getRaw() {
         return raw;
     }
 
+
     public int getCal() {
         return cal;
     }
+
+
 }
