@@ -25,4 +25,6 @@
     - 게임 실행(스테이지 선택), 스테이지 플레이
       데이터를 출력하는 기능 데이터 출력 기능 StageWriter,CmdStageWriter
     - 게임play 기능과 stage 기능을 구분
+    - palygame 은 게임기능만, 게임을 하는 로직 (플레이어 이동)
+    - sokobangame 은전박적인 stage 클리어 기능이나 게임을 실행
 # 3단계
