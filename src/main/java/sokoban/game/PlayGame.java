@@ -1,5 +1,6 @@
 package sokoban.game;
 
+import sokoban.Data.Point;
 import sokoban.Data.Position;
 import sokoban.Data.UserCommand;
 import sokoban.Wirtter.CmdStageWriterImpl;
@@ -10,8 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class PlayGame {
     private Position playerLocation;
@@ -19,7 +20,7 @@ public class PlayGame {
     private char[][] chMap;
     private int[][] intMap;
     private String[] commands;
-    private Stage stage;
+    private final Stage stage;
 
     public PlayGame(Stage stage) {
         this.chMap = stage.getChMap();
@@ -39,30 +40,45 @@ public class PlayGame {
         commandValid(command);
     }
 
-    private void commandValid(String[] command) {
+    private void commandValid(String[] command) throws IOException {
         List<UserCommand> userCommandList = new ArrayList<>();
         for (String s : command) {
             String str = s.toUpperCase();
             for (UserCommand value : UserCommand.values()) {
                 if (str.equals(String.valueOf(value))) {
-                   // executeStage(value);
+                    executeStage(value, str);
                 }
             }
         }
     }
 
-    private void executeStage(UserCommand userCommand) throws IOException {
+    private void executeStage(UserCommand userCommand, String str) throws IOException {
         System.out.println();
         System.out.println("명령어 : " + userCommand);
-        System.out.println(userCommand.value + " : " + userCommand.getMessage());
+        System.out.println(str.toLowerCase() + " : " + userCommand.getMessage());
         StageWriter writer = new CmdStageWriterImpl();
-        System.out.println();
-       // writer.writeStageMap(movePlayer());
+
+        if (!isMoveable()) {
+            return;
+        }
+        writer.writeStageMap(movePlayer(userCommand));
     }
 
-//    private Stage movePlayer() {
-//
-//    }
+    private boolean isMoveable() {
+        return true;
+    }
+
+    private Stage movePlayer(UserCommand userCommand) throws IOException {
+        Point point = userCommand.getPoint();
+
+        int nx = playerLocation.getRaw() + point.getRaw();
+        int ny = playerLocation.getCal() + point.getCal();
+
+        playerLocation.setPlayerRaw(nx);
+        playerLocation.setPlayerCal(ny);
+
+        return stage;
+    }
 
     private String getMessage() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
