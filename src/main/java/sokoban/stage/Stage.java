@@ -3,6 +3,7 @@ package sokoban.stage;
 import sokoban.Data.Point;
 import sokoban.Data.Sign;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Stage {
@@ -22,6 +23,14 @@ public class Stage {
         this.stageNumber = stageNumber;
 
         setMap(chMap, intMap);
+    }
+
+    public char[][] getChMap() {
+        return chMap;
+    }
+
+    public int[][] getIntMap() {
+        return intMap;
     }
 
 

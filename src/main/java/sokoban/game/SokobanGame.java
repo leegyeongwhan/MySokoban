@@ -24,10 +24,11 @@ public class SokobanGame {
         StageWriter writer = new CmdStageWriterImpl();
         Stage stage = reader.readStageMap();
         writer.writeStageMap(stage);
+        firstStageGame(stage);
     }
 
-    private void firstStageGame(Stage stage) {
-        PlayGame playGame = new PlayGame();
+    private void firstStageGame(Stage stage) throws IOException {
+        PlayGame playGame = new PlayGame(stage);
         playGame.gameSet(stage);
     }
 }

@@ -8,20 +8,19 @@ public enum UserCommand {
     Q(new Point(0, 0), "프로그램을 종료합니다");  // 프로그램 종료
 
     UserCommand(Point point, String message) {
-        this.direction = point;
+        this.point = point;
         this.message = message;
     }
 
-    //플레이어 이동
-    private Point direction;
-
-    public int value;
-    String message;
-
-
-    public Point getDirection() {
-        return direction;
+    public String getMessage() {
+        return message;
     }
 
+    //플레이어 이동
+    private Point point;
+    private String message;
 
+    public Point getPoint() {
+        return point;
+    }
 }

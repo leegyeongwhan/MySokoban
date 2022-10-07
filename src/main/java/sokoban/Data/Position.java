@@ -14,4 +14,19 @@ public class Position extends Point {
         this.playerCal = super.getCal();
     }
 
+    public int getPlayerRaw() {
+        return playerRaw;
+    }
+
+    public void setPlayerRaw(int playerRaw) {
+        this.playerRaw = playerRaw;
+    }
+
+    public int getPlayerCal() {
+        return playerCal;
+    }
+
+    public void setPlayerCal(int playerCal) {
+        this.playerCal = playerCal;
+    }
 }
