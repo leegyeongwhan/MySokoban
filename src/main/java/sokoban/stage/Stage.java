@@ -1,4 +1,7 @@
-package sokoban.Data;
+package sokoban.stage;
+
+import sokoban.Data.Point;
+import sokoban.Data.Sign;
 
 import java.util.List;
 

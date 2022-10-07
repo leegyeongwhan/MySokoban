@@ -24,5 +24,5 @@
     - 게임 관련 기능 SokobanGame , Play
     - 게임 실행(스테이지 선택), 스테이지 플레이
       데이터를 출력하는 기능 데이터 출력 기능 StageWriter,CmdStageWriter
-
+    - 게임play 기능과 stage 기능을 구분
 # 3단계

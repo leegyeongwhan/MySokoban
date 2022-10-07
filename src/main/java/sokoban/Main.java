@@ -1,7 +1,7 @@
 package sokoban;
 
 
-import sokoban.Data.Stage;
+import sokoban.stage.Stage;
 import sokoban.Reader.CmdStageReaderImpl;
 import sokoban.Reader.StageReader;
 import sokoban.Wirtter.CmdStageWriterImpl;
@@ -31,7 +31,6 @@ public class Main {
             List<Stage> maps = reader.readAllGameMap();
 
             writer.writeStageAllMap(maps);
-            writer.writeStageMap(maps.get(1));
         } catch (Exception e) {
             System.out.println("오류발생");
         }

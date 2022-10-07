@@ -1,13 +1,12 @@
 package sokoban.Reader;
 
-import sokoban.Data.Stage;
-import sokoban.Data.StageUtil;
+import sokoban.stage.Stage;
+import sokoban.stage.StageUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CmdStageReaderImpl implements StageReader {

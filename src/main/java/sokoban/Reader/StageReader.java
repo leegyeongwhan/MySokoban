@@ -1,6 +1,6 @@
 package sokoban.Reader;
 
-import sokoban.Data.Stage;
+import sokoban.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
