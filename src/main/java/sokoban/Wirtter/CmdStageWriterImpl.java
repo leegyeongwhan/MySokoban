@@ -17,10 +17,22 @@ public class CmdStageWriterImpl implements StageWriter {
     }
 
     @Override
-    public void writeStageMap(Stage stage) throws IOException {
+    public void writeStageCharMap(Stage stage) throws IOException {
         System.out.println("Stage" + stage.getStageNumber());
         stage.printMap();
     }
+
+    @Override
+    public void writeStageCharMap(char[][] chrMap) throws IOException {
+        for (char[] arr : chrMap) {
+            for (char chr : arr) {
+                System.out.print(chr);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 
     private static void AllPrintData(Stage stage) {
         System.out.println("Stage" + stage.getStageNumber());

@@ -10,5 +10,7 @@ public interface StageWriter {
 
     void writeStageAllMap(List<Stage> maps) throws IOException;
 
-    void writeStageMap(Stage readStageMap) throws IOException;
+    void writeStageCharMap(Stage readStageMap) throws IOException;
+
+    void writeStageCharMap(char[][] readStageMap) throws IOException;
 }
