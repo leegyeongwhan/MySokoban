@@ -2,6 +2,7 @@ package sokoban.game;
 
 import sokoban.Data.Point;
 import sokoban.Data.Position;
+import sokoban.Data.Sign;
 import sokoban.Data.UserCommand;
 import sokoban.Wirtter.CmdStageWriterImpl;
 import sokoban.Wirtter.StageWriter;
@@ -12,14 +13,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class PlayGame {
     private Position playerLocation;
     private UserCommand command;
     private char[][] chMap;
     private int[][] intMap;
-    private String[] commands;
     private final Stage stage;
 
     public PlayGame(Stage stage) {
@@ -27,6 +26,8 @@ public class PlayGame {
         this.intMap = stage.getIntMap();
         this.playerLocation = new Position(stage.getPlayerLocation());
         this.stage = stage;
+        this.chMap = stage.getChMap();
+        this.intMap = stage.getIntMap();
     }
 
 
@@ -58,26 +59,50 @@ public class PlayGame {
         System.out.println(str.toLowerCase() + " : " + userCommand.getMessage());
         StageWriter writer = new CmdStageWriterImpl();
 
-        if (!isMoveable()) {
+        if (!isMoveable(playerLocation, userCommand.getPoint())) {
+            try {
+                System.out.println("(경고!) 해당 명령을 수행할 수 없습니다!!");
+            } catch (Exception e) {
+                throw new IllegalStateException("경고 메세지 출력 중 문제가 발생하였습니다.");
+            }
             return;
         }
-        writer.writeStageMap(movePlayer(userCommand));
+        movePlayer(userCommand);
+        writer.writeStageCharMap(chMap);
     }
 
-    private boolean isMoveable() {
+    private boolean isMoveable(Position playerLocation, Point point) {
+        int playerRaw = playerLocation.getPlayerRaw();
+        int playerCal = playerLocation.getPlayerCal();
+
+        int nx = playerRaw + point.getRaw();
+        int ny = playerCal + point.getCal();
+
+        if (nx >= stage.getMapSize().getRaw() || ny >= stage.getMapSize().getCal() || nx < 0 || ny < 0) {
+            return false;
+        }
+        if (Sign.EMPTY.getSign() != chMap[nx][ny]) {
+            return false;
+        }
         return true;
     }
 
-    private Stage movePlayer(UserCommand userCommand) throws IOException {
+    private void movePlayer(UserCommand userCommand) throws IOException {
+        int playerRaw = playerLocation.getPlayerRaw();
+        int playerCal = playerLocation.getPlayerCal();
         Point point = userCommand.getPoint();
+        int nx = playerRaw + point.getRaw();
+        int ny = playerCal + point.getCal();
 
-        int nx = playerLocation.getRaw() + point.getRaw();
-        int ny = playerLocation.getCal() + point.getCal();
+        char originSign = stage.getPlayerLocationSignValue(playerLocation);
+        if (Sign.PLAYER.getSign() == originSign) {
+            originSign = Sign.EMPTY.getSign();
+        }
 
-        playerLocation.setPlayerRaw(nx);
-        playerLocation.setPlayerCal(ny);
-
-        return stage;
+        chMap[nx][ny] = Sign.PLAYER.getSign();
+        chMap[playerRaw][playerCal] = originSign;
+        this.playerLocation.setPlayerRaw(nx);
+        this.playerLocation.setPlayerCal(ny);
     }
 
     private String getMessage() throws IOException {
