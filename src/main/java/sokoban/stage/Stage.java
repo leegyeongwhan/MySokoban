@@ -1,6 +1,7 @@
 package sokoban.stage;
 
 import sokoban.Data.Point;
+import sokoban.Data.Position;
 import sokoban.Data.Sign;
 
 import java.util.Arrays;
@@ -89,4 +90,7 @@ public class Stage {
         return ballCount;
     }
 
+    public char getPlayerLocationSignValue(Position playerLocation) {
+        return chMap[playerLocation.getPlayerRaw()][playerLocation.getPlayerCal()];
+    }
 }
