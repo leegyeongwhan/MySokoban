@@ -23,7 +23,7 @@ public class SokobanGame {
         StageReader reader = new CmdStageReaderImpl();
         StageWriter writer = new CmdStageWriterImpl();
         Stage stage = reader.readStageMap();
-        writer.writeStageMap(stage);
+        writer.writeStageCharMap(stage);
         firstStageGame(stage);
     }
 
