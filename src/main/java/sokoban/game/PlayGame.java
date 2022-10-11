@@ -32,7 +32,9 @@ public class PlayGame {
 
 
     public void gameSet(Stage stage) throws IOException {
-        startMessageAndCommandLine();
+        while (true) {
+            startMessageAndCommandLine();
+        }
     }
 
     private void startMessageAndCommandLine() throws IOException {
@@ -61,6 +63,7 @@ public class PlayGame {
 
         if (!isMoveable(playerLocation, userCommand.getPoint())) {
             try {
+                writer.writeStageCharMap(chMap);
                 System.out.println("(경고!) 해당 명령을 수행할 수 없습니다!!");
             } catch (Exception e) {
                 throw new IllegalStateException("경고 메세지 출력 중 문제가 발생하였습니다.");
@@ -78,7 +81,7 @@ public class PlayGame {
         int nx = playerRaw + point.getRaw();
         int ny = playerCal + point.getCal();
 
-        if (nx >= stage.getMapSize().getRaw() || ny >= stage.getMapSize().getCal() || nx < 0 || ny < 0) {
+        if (ny > chMap[nx].length || nx > chMap.length || nx < 0 || ny < 0) {
             return false;
         }
         if (Sign.EMPTY.getSign() != chMap[nx][ny]) {
