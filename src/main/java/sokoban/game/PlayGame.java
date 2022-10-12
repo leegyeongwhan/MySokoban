@@ -12,18 +12,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
 
 public class PlayGame {
     private Position playerLocation;
     private UserCommand command;
-    private char[][] chMap;
+    private char[][] playMap;
     private int[][] intMap;
     private final Stage stage;
     private int ballInHallCnt;
     private StageWriter writer = new CmdStageWriterImpl();
-    ;
 
     public PlayGame(Stage stage) {
         this.stage = stage;  // stage 객체는 따 보관해두고 stage를 r로 초기화 해야하기때문에 init게임을 따로만든다로
@@ -31,11 +28,10 @@ public class PlayGame {
     }
 
     private void initGame(Stage stage) {
-        this.chMap = stage.getChMap();
+        this.playMap = stage.stageClone();
         this.intMap = stage.getIntMap();
         this.playerLocation = new Position(stage.getPlayerLocation());
-        this.chMap = stage.getChMap();
-        this.intMap = stage.getIntMap();
+
     }
 
     public void GameStart() throws IOException {
@@ -53,7 +49,7 @@ public class PlayGame {
 
     private void excuteCommand(String command) throws IOException {
         command = command.toUpperCase();
-    //    Optional<UserCommand> userCommand = UserCommand.findUserCommand(command); //command에 맞는 usercommand
+        //    Optional<UserCommand> userCommand = UserCommand.findUserCommand(command); //command에 맞는 usercommand
         System.out.println();
         System.out.println("명령어 : " + command.toLowerCase());
 
@@ -64,7 +60,7 @@ public class PlayGame {
     private void printWarning() {
         try {
             System.out.println("(경고!) 해당 명령을 수행할 수 없습니다!!");
-            writer.writeStageCharMap(chMap);
+            writer.writeStageCharMap(playMap);
         } catch (Exception e) {
             throw new IllegalStateException("경고 메세지 출력 중 문제가 발생하였습니다.");
         }
@@ -83,7 +79,8 @@ public class PlayGame {
     private void reSet() throws IOException {
         System.out.println(UserCommand.R.getMessage());
         initGame(stage);
-        writer.writeStageCharMap(chMap);
+        writer.writeStageCharMap(playMap);
+        writer.writeStageCharMap(stage.getChMap());
     }
 
     private boolean isRest(String command) {
@@ -131,10 +128,10 @@ public class PlayGame {
         int nx = playerRaw + point.getRaw();
         int ny = playerCal + point.getCal();
 
-        if (ny > chMap[nx].length || nx > chMap.length || nx < 0 || ny < 0) {
+        if (ny > playMap[nx].length || nx > playMap.length || nx < 0 || ny < 0) {
             return false;
         }
-        if (Sign.EMPTY.getSign() != chMap[nx][ny]) {
+        if (Sign.EMPTY.getSign() != playMap[nx][ny]) {
             return false;
         }
         return true;
@@ -146,7 +143,7 @@ public class PlayGame {
             Point point = userCommand.getPoint();
             movePlayerPosition(playerLocation, point);
             System.out.println(userCommand.name() + ": " + userCommand.getMessage());
-            writer.writeStageCharMap(chMap);
+            writer.writeStageCharMap(playMap);
         } catch (Exception e) {
             throw new IllegalStateException("플레이어를 움직이는 도중 문제가 발생하였습니다.[" + userCommand.name() + "]");
         }
@@ -165,8 +162,8 @@ public class PlayGame {
             originSign = Sign.EMPTY.getSign();
         }
 
-        chMap[nx][ny] = Sign.PLAYER.getSign();
-        chMap[playerRaw][playerCal] = originSign;
+        this.playMap[nx][ny] = Sign.PLAYER.getSign();
+        this.playMap[playerRaw][playerCal] = originSign;
         this.playerLocation.setPlayerRaw(nx);
         this.playerLocation.setPlayerCal(ny);
     }
