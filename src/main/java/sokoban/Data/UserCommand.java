@@ -1,5 +1,8 @@
 package sokoban.Data;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum UserCommand {
     W(new Point(-1, 0), "위로 이동합니다."), // 위
     A(new Point(0, -1), "왼쪽으로 이동합니다."), // 왼쪽
@@ -11,6 +14,19 @@ public enum UserCommand {
     UserCommand(Point point, String message) {
         this.point = point;
         this.message = message;
+    }
+
+    public static Optional<UserCommand> findUserCommand(String command) {
+        try {
+            for (UserCommand playerCommand : UserCommand.values()) {
+                if (command.equals(playerCommand.name())) {
+                    return Optional.of(playerCommand);
+                }
+            }
+        } catch (Exception e) {
+            new IllegalStateException("일치하는 커멘드 값이 없습니다");
+        }
+        return Optional.empty();
     }
 
     public String getMessage() {
