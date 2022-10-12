@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.Optional;
 
 public class PlayGame {
     private Position playerLocation;
@@ -49,8 +51,33 @@ public class PlayGame {
         }
     }
 
-    private void excuteCommand(String command) {
+    private void excuteCommand(String command) throws IOException {
+        command = command.toUpperCase();
+    //    Optional<UserCommand> userCommand = UserCommand.findUserCommand(command); //command에 맞는 usercommand
+        System.out.println();
+        System.out.println("명령어 : " + command.toLowerCase());
 
+        UserCommand.findUserCommand(command)
+                .ifPresentOrElse(this::moveProcess, this::printWarning);
+    }
+
+    private void printWarning() {
+        try {
+            System.out.println("(경고!) 해당 명령을 수행할 수 없습니다!!");
+            writer.writeStageCharMap(chMap);
+        } catch (Exception e) {
+            throw new IllegalStateException("경고 메세지 출력 중 문제가 발생하였습니다.");
+        }
+
+    }
+
+    private void moveProcess(UserCommand userCommand) {
+
+        if (!isPlayerMoveable(playerLocation, userCommand.getPoint())) {
+            printWarning();
+            return;
+        }
+        movePlayer(userCommand);
     }
 
     private void reSet() throws IOException {
@@ -96,23 +123,6 @@ public class PlayGame {
         return false;
     }
 
-    private void executeStage(UserCommand userCommand, String str) throws IOException {
-        System.out.println();
-        System.out.println("명령어 : " + userCommand);
-        System.out.println(str.toLowerCase() + " : " + userCommand.getMessage());
-
-        if (!isPlayerMoveable(playerLocation, userCommand.getPoint())) {
-            try {
-                writer.writeStageCharMap(chMap);
-                System.out.println("(경고!) 해당 명령을 수행할 수 없습니다!!");
-            } catch (Exception e) {
-                throw new IllegalStateException("경고 메세지 출력 중 문제가 발생하였습니다.");
-            }
-            return;
-        }
-        movePlayer(userCommand);
-        writer.writeStageCharMap(chMap);
-    }
 
     private boolean isPlayerMoveable(Position playerLocation, Point point) {
         int playerRaw = playerLocation.getPlayerRaw();
@@ -130,10 +140,23 @@ public class PlayGame {
         return true;
     }
 
-    private void movePlayer(UserCommand userCommand) throws IOException {
+    private void movePlayer(UserCommand userCommand) {
+
+        try {
+            Point point = userCommand.getPoint();
+            movePlayerPosition(playerLocation, point);
+            System.out.println(userCommand.name() + ": " + userCommand.getMessage());
+            writer.writeStageCharMap(chMap);
+        } catch (Exception e) {
+            throw new IllegalStateException("플레이어를 움직이는 도중 문제가 발생하였습니다.[" + userCommand.name() + "]");
+        }
+
+    }
+
+    private void movePlayerPosition(Position playerLocation, Point point) {
         int playerRaw = playerLocation.getPlayerRaw();
         int playerCal = playerLocation.getPlayerCal();
-        Point point = userCommand.getPoint();
+
         int nx = playerRaw + point.getRaw();
         int ny = playerCal + point.getCal();
 
