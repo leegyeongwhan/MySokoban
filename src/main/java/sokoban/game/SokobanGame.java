@@ -29,6 +29,6 @@ public class SokobanGame {
 
     private void firstStageGame(Stage stage) throws IOException {
         PlayGame playGame = new PlayGame(stage);
-        playGame.gameSet(stage);
+        playGame.GameStart();
     }
 }
