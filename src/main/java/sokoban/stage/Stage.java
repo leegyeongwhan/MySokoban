@@ -69,6 +69,18 @@ public class Stage {
         System.out.println();
     }
 
+    public char[][] stageClone() {
+        if (chMap == null) {
+            return null;
+        }
+
+        char[][] result = new char[chMap.length][];
+        for (int i = 0; i < chMap.length; i++) {
+            result[i] = chMap[i].clone();
+        }
+        return result;
+    }
+
     public int getStageNumber() {
         return stageNumber;
     }
