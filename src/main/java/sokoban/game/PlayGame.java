@@ -68,12 +68,34 @@ public class PlayGame {
     }
 
     private void moveProcess(UserCommand userCommand) {
+        Point point = userCommand.getPoint();
+        Point nextPoint = getPlayerNextLocation(point);
 
-        if (!isPlayerMoveable(playerLocation, userCommand.getPoint())) {
+        if (!isPlayerMoveable(playerLocation, point)) {
             printWarning();
             return;
         }
+
+        if (!isBallMoveable()) {
+
+            return;
+        }
+        moveBall();
         movePlayer(userCommand);
+    }
+
+    private Point getPlayerNextLocation(Point point) {
+        int playerRaw = playerLocation.getPlayerRaw() + point.getRaw();
+        int playerCal = playerLocation.getPlayerCal() + point.getCal();
+
+        return new Point(playerRaw, playerCal);
+    }
+
+    private void moveBall() {
+    }
+
+    private boolean isBallMoveable() {
+        return true;
     }
 
     private void reSet() throws IOException {
