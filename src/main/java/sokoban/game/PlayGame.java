@@ -68,21 +68,24 @@ public class PlayGame {
     }
 
     private void moveProcess(UserCommand userCommand) {
-        Point point = userCommand.getPoint();
-        Point nextPoint = getPlayerNextLocation(point);
+        Point nextPoint = getPlayerNextLocation(userCommand.getPoint());
+        char nextSign = playMap[nextPoint.getRaw()][nextPoint.getCal()];
 
-        if (!isPlayerMoveable(playerLocation, point)) {
+        if (!isPlayerMoveable(nextPoint)) {
             printWarning();
             return;
         }
-
-        if (!isBallMoveable()) {
-
-            return;
-        }
-        moveBall();
         movePlayer(userCommand);
+
+        if (nextSign == Sign.BALL.getSign()) {
+            if (!isBallMoveable(nextPoint, userCommand.getPoint())) {
+                printWarning();
+                return;
+            }
+            moveBall(nextPoint, userCommand);
+        }
     }
+
 
     private Point getPlayerNextLocation(Point point) {
         int playerRaw = playerLocation.getPlayerRaw() + point.getRaw();
@@ -91,10 +94,46 @@ public class PlayGame {
         return new Point(playerRaw, playerCal);
     }
 
-    private void moveBall() {
+    private void moveBall(Point nextPoint, UserCommand userCommand) {
+        try {
+            Point point = userCommand.getPoint();
+            moveBallPosition(nextPoint, point);
+            writer.writeStageCharMap(playMap);
+        } catch (Exception e) {
+            throw new IllegalStateException("볼을 움직이는데 문제가 생겼습니다");
+        }
     }
 
-    private boolean isBallMoveable() {
+    private void moveBallPosition(Point nextPoint, Point point) {
+        int nx = nextPoint.getRaw() + point.getRaw();
+        int ny = nextPoint.getCal() + point.getCal();
+
+        char originSign = stage.getBsllLocationSignValue(nextPoint); //가져온게볼이면
+        if (Sign.BALL.getSign() == originSign) {
+            originSign = Sign.PLAYER.getSign();
+        }
+
+        this.playMap[nx][ny] = Sign.BALL.getSign();
+        this.playMap[nextPoint.getRaw()][nextPoint.getCal()] = originSign;
+        this.playerLocation.setPlayerRaw(nx);
+        this.playerLocation.setPlayerCal(ny);
+    }
+
+    private boolean isBallMoveable(Point nextPoint, Point point) { // 세가지 경우 구멍인경우,빈공간인경우 , 벽인경우
+        int nx = nextPoint.getRaw() + point.getRaw();
+        int ny = nextPoint.getCal() + point.getCal();
+
+        if (ny > playMap[nx].length || nx > playMap.length || nx < 0 || ny < 0) {
+            return false;
+        }
+
+        if (playMap[nx][ny] == Sign.HALL.getSign()) {
+            return true;
+        }
+
+        if (playMap[nx][ny] == Sign.EMPTY.getSign()) {
+            return true;
+        }
         return true;
     }
 
@@ -143,12 +182,9 @@ public class PlayGame {
     }
 
 
-    private boolean isPlayerMoveable(Position playerLocation, Point point) {
-        int playerRaw = playerLocation.getPlayerRaw();
-        int playerCal = playerLocation.getPlayerCal();
-
-        int nx = playerRaw + point.getRaw();
-        int ny = playerCal + point.getCal();
+    private boolean isPlayerMoveable(Point nextPoint) {
+        int nx = nextPoint.getRaw();
+        int ny = nextPoint.getCal();
 
         if (ny > playMap[nx].length || nx > playMap.length || nx < 0 || ny < 0) {
             return false;

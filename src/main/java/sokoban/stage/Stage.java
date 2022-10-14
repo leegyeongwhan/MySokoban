@@ -105,4 +105,9 @@ public class Stage {
     public char getPlayerLocationSignValue(Position playerLocation) {
         return chMap[playerLocation.getPlayerRaw()][playerLocation.getPlayerCal()];
     }
+
+    public char getBsllLocationSignValue(Point nextPoint) {
+
+        return 0;
+    }
 }
