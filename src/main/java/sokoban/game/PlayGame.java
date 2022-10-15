@@ -70,20 +70,39 @@ public class PlayGame {
     private void moveProcess(UserCommand userCommand) {
         Point nextPoint = getPlayerNextLocation(userCommand.getPoint());
         char nextSign = playMap[nextPoint.getRaw()][nextPoint.getCal()];
+        boolean isball = (nextSign == Sign.BALL.getSign());
 
-        if (!isPlayerMoveable(nextPoint)) {
-            printWarning();
-            return;
-        }
-        movePlayer(userCommand);
-
-        if (nextSign == Sign.BALL.getSign()) {
-            if (!isBallMoveable(nextPoint, userCommand.getPoint())) {
+        if (isball) { // 볼을 움직일수 있으면 공과 플레이는 같이움직인다
+            moveBallandPlayer(nextPoint, userCommand);
+        } else {
+            if (!isPlayerMoveable(nextPoint)) {
                 printWarning();
                 return;
             }
-            moveBall(nextPoint, userCommand);
+            movePlayer(userCommand);
         }
+
+        if (!isBallMoveable(nextPoint, userCommand.getPoint())) {
+            printWarning();
+            return;
+        }
+        moveBall(nextPoint, userCommand);
+
+    }
+
+    private void moveBallandPlayer(Point nextPoint, UserCommand userCommand) {
+        int nx = nextPoint.getRaw() + userCommand.getPoint().getRaw();
+        int ny = nextPoint.getCal() + userCommand.getPoint().getCal();
+
+        char originSign = stage.getBsllLocationSignValue(nextPoint); //가져온게볼이면
+        if (Sign.BALL.getSign() == originSign) {
+            originSign = Sign.PLAYER.getSign();
+        }
+
+        this.playMap[nx][ny] = Sign.BALL.getSign();
+        this.playMap[nextPoint.getRaw()][nextPoint.getCal()] = originSign;
+        this.playerLocation.setPlayerRaw(nx);
+        this.playerLocation.setPlayerCal(ny);
     }
 
 
